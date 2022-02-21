@@ -49,13 +49,18 @@ namespace PracticaCore2EMQ.Controllers
 
                 ClaimsPrincipal usuarioPrincipal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, usuarioPrincipal);               
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, usuarioPrincipal);
+             
+                string controller = TempData["controller"].ToString();
+                string action = TempData["action"].ToString();
+
+                return RedirectToAction(action, controller);
             }
             else
             {
                 ViewBag.Mensaje = "Usuario/Password incorrectos";
             }
-            return RedirectToAction("Perfil");
+            return View();
         }
 
         [AuthorizeUsuario]
@@ -67,9 +72,11 @@ namespace PracticaCore2EMQ.Controllers
         
         }
 
+        [AuthorizeUsuario]
         public IActionResult Pedidos()
         {
             List<VistaPedidos> pedidos = this.repo.GetPedidosUsuario(int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            pedidos.OrderByDescending(x => x.FechaPedido);
             return View(pedidos);
         }
 

@@ -21,16 +21,24 @@ namespace PracticaCore2EMQ.Controllers
             this.repo = repo;
         }
 
-        public IActionResult Index(int?idgenero)
+        public IActionResult Index(int?idgenero, int?posicion)
         {
             List<Libro> libros = new List<Libro>();
+            if(posicion == null)
+            {
+                posicion = 1;
+            }
+            
             if(idgenero != null)
             {
                 libros = this.repo.GetLibrosGenero(idgenero.Value);
             } else
             {
-                libros = this.repo.GetLibros();
+                int numregistros = this.repo.GetNumeroRegistros();
+                ViewBag.NumeroRegistros = numregistros;
+                libros = this.repo.GetGrupoLibros(posicion.Value);
             }
+
             return View(libros);
         }
 

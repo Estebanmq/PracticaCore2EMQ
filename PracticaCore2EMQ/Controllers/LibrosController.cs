@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PracticaCore2EMQ.Extensions;
+using PracticaCore2EMQ.Filters;
 using PracticaCore2EMQ.Models;
 using PracticaCore2EMQ.Repositories;
 using System;
@@ -19,6 +20,7 @@ namespace PracticaCore2EMQ.Controllers
         {
             this.repo = repo;
         }
+
         public IActionResult DetallesLibro(int idlibro, bool? cesta)
         {
             Libro libro = this.repo.FindLibro(idlibro);
@@ -43,9 +45,9 @@ namespace PracticaCore2EMQ.Controllers
             if (idlibro != null)
             {
                 libroscesta.Remove(idlibro.Value);
-                HttpContext.Session.SetObject("libroscesta",libroscesta);
+                HttpContext.Session.SetObject("libroscesta", libroscesta);
             }
-
+          
             List<Libro> libros = new List<Libro>();
             foreach(int id in libroscesta)
             {
@@ -53,19 +55,20 @@ namespace PracticaCore2EMQ.Controllers
                 libros.Add(libro);
             }
 
-            
-
             return View(libros);
         }
 
+        [AuthorizeUsuario]
         [HttpPost]
         public IActionResult Cesta(List<int>idlibro)
         {
-            foreach(int id in idlibro)
+            int idfactura = this.repo.GetIdFactura() + 1;
+            foreach (int id in idlibro)
             {
-                this.repo.InsertPedido(this.repo.GetIdFactura() + 1, id, int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value));
+                this.repo.InsertPedido(idfactura, id, int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value));
             }
-            return RedirectToAction("Index", "Home");
+            HttpContext.Session.Remove("libroscesta");
+            return RedirectToAction("Pedidos", "Manage");
         }
 
       

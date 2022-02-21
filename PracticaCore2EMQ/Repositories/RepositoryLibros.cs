@@ -1,9 +1,31 @@
-﻿using PracticaCore2EMQ.Data;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using PracticaCore2EMQ.Data;
 using PracticaCore2EMQ.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+#region VISTAS Y PROCEDIMIENTOS
+//alter view V_LIBROS_INDIVIDUAL
+//AS
+//	select CAST(row_number() over(order by IdLibro) as int)
+
+//    as POSICION, isnull(IdLibro, 0) as IDLIBRO
+//	, TITULO, AUTOR, EDITORIAL, PORTADA,RESUMEN,PRECIO,IDGENERO from LIBROS
+//go
+
+//alter procedure SP_PAGINARGRUPO_LIBROS
+//(@POSICION INT)
+//AS
+//    select POSICION, IDLIBRO, TITULO, AUTOR, EDITORIAL, PORTADA, RESUMEN, PRECIO, IDGENERO from V_LIBROS_INDIVIDUAL
+//	where posicion >= @POSICION and posicion < (@POSICION + 3)
+
+//GO
+
+#endregion 
+
 
 namespace PracticaCore2EMQ.Repositories
 {
@@ -38,7 +60,26 @@ namespace PracticaCore2EMQ.Repositories
                            select datos;
 
             return consulta.ToList();
+        }     
+
+        public int GetNumeroRegistros()
+        {
+            var consulta = (from datos in this.context.Libros
+                            select datos).Count();
+            return consulta;
         }
+      
+
+        public List<Libro> GetGrupoLibros(int posicion)
+        {
+            string sql = "SP_PAGINARGRUPO_LIBROS @POSICION";
+            SqlParameter paramposicion =
+            new SqlParameter("@POSICION", posicion);
+            var consulta =
+            this.context.Libros.FromSqlRaw(sql, paramposicion);
+            return consulta.ToList();
+        }
+
 
         public void InsertPedido(int idfactura, int idlibro, int idusuario)
         {

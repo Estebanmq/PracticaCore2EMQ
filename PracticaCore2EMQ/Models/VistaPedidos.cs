@@ -8,23 +8,38 @@ using System.Threading.Tasks;
 namespace PracticaCore2EMQ.Models
 {
 
-    [Table("VISTA_PEDIDOS")]
+    [Table("VISTAPEDIDOS")]
     public class VistaPedidos
     {
         [Key]
-        [Column("IDPEDIDO")]
-        public int IdPedido { get; set; }
-
-        [Column("NOMBRE")]
-        public String NombreUsuario { get; set; }
+        [Column("IDVISTAPEDIDOS")]
+        public long IdPedido { get; set; }
 
         [Column("IDUSUARIO")]
         public int IdUsuario { get; set; }
 
-        [Column("IDLIBRO")]
-        public int IdLibro { get; set; }
+        [Column("NOMBRE")]
+        public String NombreUsuario { get; set; }
+
+        [Column("APELLIDOS")]
+        public String ApellidoUsuario { get; set; }
+
 
         [Column("TITULO")]
         public String Titulo { get; set; }
+
+        [Column("PRECIO")]
+        public int Precio { get; set; }
+
+        [Column("PORTADA")]
+        public String Portada { get; set; }
+
+        [Column("FECHA")]
+        public DateTime FechaPedido { get; set; }
+
+        [Column("PRECIOFINAL")]
+        public int PrecioFinal { get; set; }
+
+
     }
 }
