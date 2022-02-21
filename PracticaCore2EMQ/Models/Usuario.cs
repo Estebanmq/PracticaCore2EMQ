@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PracticaCore2EMQ.Models
 {
-    [Table("USUARIO")]
+    [Table("USUARIOS")]
     public class Usuario
     {
         [Key]

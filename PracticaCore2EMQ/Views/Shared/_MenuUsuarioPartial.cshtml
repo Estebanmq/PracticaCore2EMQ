@@ -1,0 +1,25 @@
+﻿@{
+    List<int> cesta = Context.Session.GetObject<List<int>>("libroscesta");
+}
+
+
+@if (cesta != null) {         
+    <li class="nav-item">
+        <a asp-controller="Libros" asp-action="Cesta" class="nav-link text-dark">Libros en la cesta: @cesta.Count</a>
+    </li>
+}
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Perfil"><img src="~/images/@Context.User.FindFirst("fotousuario").Value" style="width: 25px; height: 25px;" />Hola, @Context.User.FindFirst(ClaimTypes.Name).Value</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="CerrarSesion">Cerrar Sesion</a>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Manage" asp-action="Perfil">Iniciar Session</a>
+    </li>
+}

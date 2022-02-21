@@ -5,6 +5,9 @@
 }
 
 <h1>DetallesLibro</h1>
+<h1 class="text-warning">
+    @ViewBag.Mensaje
+</h1>
 
 <div>
     <h4>Libro</h4>
@@ -32,7 +35,7 @@
             @Html.DisplayNameFor(model => model.Portada)
         </dt>
         <dd class="col-sm-10">
-            <img src="~/images/@Model.Portada" alt="Alternate Text" />
+            <img src="~/images/@Model.Portada" style="width: 300px; height: 300px;"/>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Resumen)
@@ -47,7 +50,14 @@
             @Html.DisplayFor(model => model.Precio)
         </dd>       
         <dd class="col-sm-10">
-            
+            @if (Context.Session.GetObject<List<int>>("libroscesta") != null && Context.Session.GetObject<List<int>>("libroscesta").Contains(Model.IdLibro))
+            {
+                <h2>Libro en la cesta</h2>
+            }
+            else
+            {
+                <a class="btn btn-warning" asp-controller="Libros" asp-action="DetallesLibro" asp-route-idlibro="@Model.IdLibro" asp-route-cesta="true">Añadir a la cesta</a>
+            }
         </dd>
     </dl>
 </div>

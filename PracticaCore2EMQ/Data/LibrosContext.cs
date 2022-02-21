@@ -22,6 +22,9 @@ namespace PracticaCore2EMQ.Data
         public DbSet<Pedido> Pedidos { get; set; }
 
 
-        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+
+
+        public DbSet<VistaPedidos>VistaPedidos { get; set; }
     }
 }
